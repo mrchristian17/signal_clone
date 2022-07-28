@@ -2,35 +2,34 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, KeyboardAvoidingView} from 'react-native';
 import { Image, Input, Button } from '@rneui/base';
 import { StatusBar } from "expo-status-bar";
-import { NavigationContext } from 'react-navigation';
 
-const LoginScreen = ({ navigation }) => {
+const RegisterScreen = () => {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [imageUrl, setImageUrl] = useState("");
+    const register = () => {};
 
-    const signIn = () => {}
     return (
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
             <StatusBar style="light"/>
-            <Image 
-            source={{
-                uri: "http://blog.mozilla.org/internetcitizen/files/2018/08/signal-logo.png"
-            }}
-            style={{ width: 200, height: 200}}
-            />
+            <Text h3 style={{ marginBottom: 50}}>Create a Signal Account</Text>
             <View style={styles.inputContainer}>
-                <Input placeholder='Email' autoFocus type='email' value={email}
+                <Input placeholder='Full Name' autoFocus type='text' value={name}
+                        onChangeText={(text) => setName(text)}/>
+                <Input placeholder='Email'  type='email' value={email}
                     onChangeText={(text) => setEmail(text)}/>
                 <Input placeholder='Password' secureTextEntry type='password' value={password}
                     onChangeText={(text) => setPassword(text)}/>
+                <Input placeholder='Profile Picture URL(optional)' type='text' value={imageUrl}
+                    onChangeText={(text)=>setImageUrl(text)} onSubmitEditing={register}/>
             </View>
-            <Button containerStyle={styles.button} onPress={signIn} title='Login'/>
-            <Button containerStyle={styles.button} onPress={()=> navigation.navigate('Register')} type='outline' title='Register'/>
+            <Button containerStyle={styles.button} raised onPress={register} title='Register'/>
             <View style={{ height: 100 }} />
         </KeyboardAvoidingView>
     )
 }
-export default LoginScreen;
+export default RegisterScreen;
 
 const styles = StyleSheet.create({
     container: {
