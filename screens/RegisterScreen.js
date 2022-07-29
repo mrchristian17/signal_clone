@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, KeyboardAvoidingView} from 'react-native';
 import { Image, Input, Button } from '@rneui/base';
 import { StatusBar } from "expo-status-bar";
 import { auth } from "../firebase"
-import { signInWithEmailAndPassword, onAuthStateChange, createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChange, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 
 const RegisterScreen = () => {
@@ -12,12 +12,15 @@ const RegisterScreen = () => {
     const [password, setPassword] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const register = () => {
+        console.log(name)
         createUserWithEmailAndPassword(auth, email, password)
             .then(authUser => {
-                authUser.user.updateProfile({
+                // console.log(authUser.user.email)
+                updateProfile(authUser.user,{
                     displayName: name, 
                     photoURL: imageUrl || "https://connectingcouples.us/wp-content/uploads/2019/07/avatar-placeholder.png"
                 })
+                
             .catch(error => alert(error.message))
         })
     };
