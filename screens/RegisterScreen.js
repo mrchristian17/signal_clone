@@ -2,13 +2,25 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, KeyboardAvoidingView} from 'react-native';
 import { Image, Input, Button } from '@rneui/base';
 import { StatusBar } from "expo-status-bar";
+import { auth } from "../firebase"
+import { signInWithEmailAndPassword, onAuthStateChange, createUserWithEmailAndPassword } from "firebase/auth";
+
 
 const RegisterScreen = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [imageUrl, setImageUrl] = useState("");
-    const register = () => {};
+    const register = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(authUser => {
+                authUser.user.updateProfile({
+                    displayName: name, 
+                    photoURL: imageUrl || "https://connectingcouples.us/wp-content/uploads/2019/07/avatar-placeholder.png"
+                })
+            .catch(error => alert(error.message))
+        })
+    };
 
     return (
         <KeyboardAvoidingView behavior="padding" style={styles.container}>

@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, KeyboardAvoidingView} from 'react-native';
 import { Image, Input, Button } from '@rneui/base';
 import { StatusBar } from "expo-status-bar";
 import { NavigationContext } from 'react-navigation';
+import { auth } from '../firebase';
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const signIn = () => {}
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, authUser => {
+            if(authUser) {
+                navigation.replace("Home")
+            }
+        })
+        return unsubscribe;
+    }, [])
+
+    const signIn = () => {
+        signInWithEmailAndPassword(auth, email, password)
+            .catch(error => alert(error))
+    }
     return (
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
             <StatusBar style="light"/>
