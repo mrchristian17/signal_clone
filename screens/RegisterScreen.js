@@ -6,13 +6,12 @@ import { auth } from "../firebase"
 import { signInWithEmailAndPassword, onAuthStateChange, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 
-const RegisterScreen = () => {
+const RegisterScreen =  () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const register = () => {
-        console.log(name)
         createUserWithEmailAndPassword(auth, email, password)
             .then(authUser => {
                 // console.log(authUser.user.email)

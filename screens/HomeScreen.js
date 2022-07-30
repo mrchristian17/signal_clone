@@ -43,8 +43,7 @@ const HomeScreen = ({ navigation }) => {
                         <Avatar 
                             rounded
                             source={{ 
-                                // uri: auth?.currentUser?.photoURL
-                                uri: "https://connectingcouples.us/wp-content/uploads/2019/07/avatar-placeholder.png"
+                                uri: auth?.currentUser?.photoURL
                             }}
                         />
                     </TouchableOpacity>

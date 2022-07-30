@@ -22,6 +22,19 @@ const ChatScreen = ({ navigation, route }) => {
     const [messages, setMessages] = useState([])
 
     useLayoutEffect(() => {
+        const q = query(collection(db, 'chats/'+route.params.id+'/messages'), orderBy('timestamp', 'asc'));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            setMessages(
+                snapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    data: doc.data()
+                }))
+            )
+        })
+        return unsubscribe;
+    }, [])
+
+    useLayoutEffect(() => {
         navigation.setOptions({
             title: "Chat",
             headerBackTitleVisible: false,
@@ -59,19 +72,6 @@ const ChatScreen = ({ navigation, route }) => {
             )
         })
     },[navigation, messages])
-
-    useLayoutEffect(() => {
-        const q = query(collection(db, 'chats/'+route.params.id+'/messages'), orderBy('timestamp', 'asc'));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            setMessages(
-                snapshot.docs.map((doc) => ({
-                    id: doc.id,
-                data: doc.data()
-                }))
-            )
-        })
-        return unsubscribe;
-    }, [])
 
     const sendMessage = () => {
         Keyboard.dismiss();
