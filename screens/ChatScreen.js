@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { Avatar, ListItem } from '@rneui/base';
+import { Avatar } from '@rneui/base';
 import { TouchableOpacity } from 'react-native'
 import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { SafeAreaView } from 'react-native'
@@ -11,7 +11,6 @@ import { ScrollView } from 'react-native'
 import { TextInput } from 'react-native'
 import { Keyboard } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native'
-import firebase from 'firebase/app'
 import { auth, db } from '../firebase'
 import { addDoc, collection, query, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
 

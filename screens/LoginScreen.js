@@ -33,7 +33,7 @@ const LoginScreen = ({ navigation }) => {
             style={{ width: 200, height: 200}}
             />
             <View style={styles.inputContainer}>
-                <Input placeholder='Email' autoFocus type='email' value={email}
+                <Input placeholder='Email' autoFocus type='email' autoCapitalize='none' value={email}
                     onChangeText={(text) => setEmail(text)}/>
                 <Input placeholder='Password' secureTextEntry type='password' value={password}
                     onChangeText={(text) => setPassword(text)}/>

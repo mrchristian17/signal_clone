@@ -1,20 +1,18 @@
 import React, { useLayoutEffect, useState, useEffect } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, SafeAreaView, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { NavigationContext } from 'react-navigation';
 import CustomListItems from '../components/CustomListItem'
 import { auth } from '../firebase';
-import { Avatar, ListItem } from '@rneui/base';
+import { Avatar } from '@rneui/base';
 import { AntDesign, SimpleLineIcons } from '@expo/vector-icons'
 import { db } from '../firebase'
-import { addDoc, collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 
 const HomeScreen = ({ navigation }) => {
 
     const [chats, setChats] = useState([])
 
     useEffect(() => {
-        // const unsubscribe = collection(db, 'chats').onSnapshot((snapshot) =>
         const unsubscribe = onSnapshot(collection(db, "chats"), (snapshot) => {
             setChats(
                 snapshot.docs.map((doc) => ({

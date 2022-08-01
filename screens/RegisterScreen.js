@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, KeyboardAvoidingView} from 'react-native';
-import { Image, Input, Button } from '@rneui/base';
+import { Input, Button } from '@rneui/base';
 import { StatusBar } from "expo-status-bar";
-import { auth } from "../firebase"
-import { signInWithEmailAndPassword, onAuthStateChange, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { db, auth } from "../firebase"
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { addDoc, setDoc, doc } from 'firebase/firestore';
 
 
 const RegisterScreen =  () => {
@@ -11,18 +12,37 @@ const RegisterScreen =  () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [imageUrl, setImageUrl] = useState("");
+
     const register = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then(authUser => {
-                // console.log(authUser.user.email)
                 updateProfile(authUser.user,{
                     displayName: name, 
                     photoURL: imageUrl || "https://connectingcouples.us/wp-content/uploads/2019/07/avatar-placeholder.png"
                 })
-                
+                saveUserToFirestore(authUser.user)
             .catch(error => alert(error.message))
         })
     };
+
+    const saveUserToFirestore = (user) => {
+        
+        const docRef = doc(db, "user", user.uid)
+        const data = {
+            uid: user.uid,
+            displayName: name,
+            photoURL: imageUrl,
+            email: email
+          }
+        // const userRef = collection(db, 'user');
+        setDoc(docRef, data)
+        .then(() => {
+            console.log("Document has been added successfully")
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
 
     return (
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -31,7 +51,7 @@ const RegisterScreen =  () => {
             <View style={styles.inputContainer}>
                 <Input placeholder='Full Name' autoFocus type='text' value={name}
                         onChangeText={(text) => setName(text)}/>
-                <Input placeholder='Email'  type='email' value={email}
+                <Input placeholder='Email'  type='email' autoCapitalize='none' value={email}
                     onChangeText={(text) => setEmail(text)}/>
                 <Input placeholder='Password' secureTextEntry type='password' value={password}
                     onChangeText={(text) => setPassword(text)}/>
