@@ -30,6 +30,7 @@ const RegisterScreen =  () => {
         const docRef = doc(db, "user", user.uid)
         const data = {
             uid: user.uid,
+            groups: [],
             displayName: name,
             photoURL: imageUrl,
             email: email
