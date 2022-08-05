@@ -21,7 +21,7 @@ const ChatScreen = ({ navigation, route }) => {
     const [messages, setMessages] = useState([])
 
     useLayoutEffect(() => {
-        const q = query(collection(db, 'chats/'+route.params.id+'/messages'), orderBy('timestamp', 'asc'));
+        const q = query(collection(db, 'messages/'+route.params.id+'/messages'), orderBy('timestamp', 'asc'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             setMessages(
                 snapshot.docs.map((doc) => ({
@@ -74,7 +74,7 @@ const ChatScreen = ({ navigation, route }) => {
 
     const sendMessage = () => {
         Keyboard.dismiss();
-        addDoc(collection(db, 'chats/'+route.params.id+'/messages'), {
+        addDoc(collection(db, 'messages/'+route.params.id+'/messages'), {
             timestamp: serverTimestamp(),
             message: input,
             displayName: auth.currentUser.displayName,

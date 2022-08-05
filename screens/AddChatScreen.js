@@ -3,13 +3,13 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Button, Input } from '@rneui/base';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { db } from '../firebase'
-import { addDoc, collection, getDocs, query, where, setDoc, doc } from 'firebase/firestore';
+import { auth, db } from '../firebase'
+import { collection, getDocs, query, where, setDoc, doc, serverTimestamp, updateDoc, arrayUnion } from 'firebase/firestore';
 
 const AddChat = ({navigation}) => {
 
     const [chatName, setChatName] = useState("")
-    const [selectedUser, setSelectedUser] = useState("")
+    const [selectedUserEmail, setSelectedUserEmail] = useState("")
     useLayoutEffect(() => {
         navigation.setOptions({
             title: "Add a new Chat",
@@ -18,32 +18,16 @@ const AddChat = ({navigation}) => {
     }, [navigation])
 
     const createChat = async () => {
-        if ( await checkUserExists() ) {
-            // await addDoc(collection(db, 'chats'), {chatName: chatName})
-            // const { id: docID } = await addDoc(collection(db, 'groups'), 
-            // {
-            //     createdAt: "6-6-22",
-            //     members : [],
-            //     id: "",
-            //     name: chatName,
-
-            // })
-            // // console.log("DOc before then: " + docID)
-            // .then(() => {
-            //     console.log("docID: " + docID)
-            //     const updateDocId = doc(db, "groups", docID) ;
-            //     updateDoc(updateDocId, {
-            //       id: docID
-            //   })
-            //     navigation.goBack()
-            //     })
-            // .catch((error) => alert(error.message) )
-
-            let collectionRef = collection(db, 'groups')
+        let selectedUserID = await getSelectedUserID()
+        if ( selectedUserID!= null) {
+            let collectionRef = collection(db, 'chats')
             let docRef = doc(collectionRef)
+            await updateDoc(doc(db, 'user', auth.currentUser.uid), {groups: arrayUnion(docRef.id)})
+            await updateDoc(doc(db, 'user',selectedUserID), {groups: arrayUnion(docRef.id)})
             await setDoc(docRef, {
-                createdAt: "6-6-22",
-                members : [],
+                createdAt: serverTimestamp(),
+                createdBy: auth.currentUser.uid,
+                members : [auth.currentUser.uid, selectedUserID],
                 id: docRef.id,
                 name: chatName,
             }).then(()=> {
@@ -55,28 +39,26 @@ const AddChat = ({navigation}) => {
         }
     }
 
-    const checkUserExists = async () => {
+    const getSelectedUserID = async () => {
         console.log("enter")
         const collectionSnapshot = collection(db, "user");
-        const userQuery = query(collectionSnapshot, where("email", "==", selectedUser))
+        const userQuery = query(collectionSnapshot, where("email", "==", selectedUserEmail))
         const querySnapshot = await getDocs(userQuery)
-        let queryExists = false;
+        let uid = null;
         querySnapshot.forEach((doc) => {
-            // console.log(doc.data + " : " + "true")
-            queryExists = true;
+            uid = doc.data().uid
         });
-        console.log("queryExists = " + queryExists)
-        return queryExists;
+        return uid;
     }
 
     return (
         <View style={styles.container}>
             <Input 
                 placeholder="Add User"
-                value={selectedUser}
+                value={selectedUserEmail}
                 autoFocus
                 autoCapitalize='none'
-                onChangeText={(text) => setSelectedUser(text)}
+                onChangeText={(text) => setSelectedUserEmail(text)}
                 leftIcon={
                     <AntDesign name="addusergroup" type="antdesign" size={24} color="black" />
                 }

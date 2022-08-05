@@ -4,7 +4,7 @@ import { Input, Button } from '@rneui/base';
 import { StatusBar } from "expo-status-bar";
 import { db, auth } from "../firebase"
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { addDoc, setDoc, doc } from 'firebase/firestore';
+import { setDoc, doc } from 'firebase/firestore';
 
 
 const RegisterScreen =  () => {
@@ -25,7 +25,7 @@ const RegisterScreen =  () => {
         })
     };
 
-    const saveUserToFirestore = (user) => {
+    const saveUserToFirestore = async (user) => {
         
         const docRef = doc(db, "user", user.uid)
         const data = {
@@ -36,7 +36,7 @@ const RegisterScreen =  () => {
             email: email
           }
         // const userRef = collection(db, 'user');
-        setDoc(docRef, data)
+        await setDoc(docRef, data)
         .then(() => {
             console.log("Document has been added successfully")
         })

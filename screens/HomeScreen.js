@@ -6,14 +6,15 @@ import { auth } from '../firebase';
 import { Avatar } from '@rneui/base';
 import { AntDesign, SimpleLineIcons } from '@expo/vector-icons'
 import { db } from '../firebase'
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
 
 const HomeScreen = ({ navigation }) => {
 
     const [chats, setChats] = useState([])
 
     useEffect(() => {
-        const unsubscribe = onSnapshot(collection(db, "chats"), (snapshot) => {
+        const q = query(collection(db, "chats"), where('members', 'array-contains', auth.currentUser.uid));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
             setChats(
                 snapshot.docs.map((doc) => ({
                     id: doc.id,

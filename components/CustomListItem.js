@@ -10,7 +10,7 @@ const CustomListItem = ({ id, chatName, enterChat}) => {
     const [chatMessages, setChatMessages] = useState([])
 
     useEffect(() => {
-        const q = query(collection(db, 'chats/'+id+'/messages'), orderBy('timestamp', 'desc'));
+        const q = query(collection(db, 'messages/'+id+'/messages'), orderBy('timestamp', 'desc'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             setChatMessages(
                 snapshot.docs.map((doc) => doc.data())
