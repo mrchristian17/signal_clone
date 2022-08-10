@@ -1,10 +1,12 @@
 {
   "expo": {
-    "name": "signal_clone",
+    "name": "Signal Clone",
     "slug": "signal_clone",
+    "privacy": "public",
+    "description": "A clone of Signal App made with React Native and firebase.",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Signal-Logo.svg/2048px-Signal-Logo.svg.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
